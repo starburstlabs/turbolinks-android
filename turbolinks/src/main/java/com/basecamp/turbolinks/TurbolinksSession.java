@@ -644,6 +644,24 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
     }
 
     /**
+     * <p>Returns the internal ProgressView used by Turbolinks.</p>
+     *
+     * @return The ProgressView used by Turbolinks.
+     */
+    public View getProgressView() {
+        return progressView;
+    }
+
+    /**
+     * <p>Returns the internal ProgressIndicator used by Turbolinks.</p>
+     *
+     * @return The ProgressIndicator used by Turbolinks.
+     */
+    public View getProgressIndicator() {
+        return progressIndicator;
+    }
+
+    /**
      * <p>Resets the TurbolinksSession to go through the full cold booting sequence (full page load)
      * on the next Turbolinks visit.</p>
      */
@@ -762,6 +780,10 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         }
 
         // Executed from here to account for progress indicator delay
+        turbolinksView.showProgress(progressView, progressIndicator, progressIndicatorDelay);
+    }
+
+    public void showProgressView() {
         turbolinksView.showProgress(progressView, progressIndicator, progressIndicatorDelay);
     }
 
