@@ -108,7 +108,7 @@ public class TurbolinksView extends FrameLayout {
      * @param delay             The delay before showing the progressIndicator in the view. The default progress view
      *                          is 500 ms.
      */
-    public void showProgress(final View progressView, final View progressIndicator, int delay) {
+    void showProgress(final View progressView, final View progressIndicator, int delay) {
         TurbolinksLog.d("showProgress called");
 
         // Don't show the progress view if a screenshot is available
@@ -135,7 +135,7 @@ public class TurbolinksView extends FrameLayout {
      * <p>Removes the progress view and/or screenshot from the TurbolinksView, so the webview is
      * visible underneath.</p>
      */
-    public void hideProgress() {
+    void hideProgress() {
         removeProgressView();
         removeScreenshotView();
     }
