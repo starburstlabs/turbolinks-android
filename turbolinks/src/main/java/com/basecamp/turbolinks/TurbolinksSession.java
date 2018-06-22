@@ -57,9 +57,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
     // Final vars
     // ---------------------------------------------------
 
-    static final String ACTION_ADVANCE = "advance";
-    static final String ACTION_RESTORE = "restore";
-    static final String ACTION_REPLACE = "replace";
+    public static final String ACTION_ADVANCE = "advance";
+    public static final String ACTION_RESTORE = "restore";
+    public static final String ACTION_REPLACE = "replace";
     static final String JAVASCRIPT_INTERFACE_NAME = "TurbolinksNative";
     static final int PROGRESS_INDICATOR_DELAY = 500;
 
