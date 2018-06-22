@@ -617,12 +617,12 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
             throw new IllegalArgumentException(JAVASCRIPT_INTERFACE_NAME + " is a reserved Javascript Interface name.");
         }
 
-        if (javascriptInterfaces.get(name) == null) {
+//        if (javascriptInterfaces.get(name) == null) {
             javascriptInterfaces.put(name, object);
             webView.addJavascriptInterface(object, name);
 
             TurbolinksLog.d("Adding JavascriptInterface: " + name + " for " + object.getClass().toString());
-        }
+//        }
     }
 
     /**
