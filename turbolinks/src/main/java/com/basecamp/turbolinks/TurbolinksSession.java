@@ -40,6 +40,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
     boolean screenshotsEnabled;
     boolean pullToRefreshEnabled;
     boolean webViewAttachedToNewParent;
+    boolean didReceiveError;
     int progressIndicatorDelay;
     long previousOverrideTime;
     Activity activity;
@@ -85,6 +86,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         this.screenshotsEnabled = true;
         this.pullToRefreshEnabled = true;
         this.webViewAttachedToNewParent = false;
+        this.didReceiveError = false;
 
         this.webView = TurbolinksHelper.createWebView(applicationContext);
         this.webView.addJavascriptInterface(this, JAVASCRIPT_INTERFACE_NAME);
@@ -96,16 +98,27 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
             @Override
             public void onPageFinished(WebView view, final String location) {
+                if (didReceiveError) {
+                    didReceiveError = false;
+                    return;
+                }
                 String jsCall = "window.webView == null";
                 webView.evaluateJavascript(jsCall, new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String s) {
                         if (Boolean.parseBoolean(s) && !bridgeInjectionInProgress) {
+                            turbolinksIsReady = false;
                             bridgeInjectionInProgress = true;
                             TurbolinksHelper.injectTurbolinksBridge(TurbolinksSession.this, applicationContext, webView);
                             TurbolinksLog.d("Bridge injected");
 
                             turbolinksAdapter.onPageFinished();
+                        } else {
+                            TurbolinksLog.d("webView exists");
+                            turbolinksView.hideProgress();
+                            turbolinksIsReady = true;
+                            bridgeInjectionInProgress = false;
+                            coldBootInProgress = false;
                         }
                     }
                 });
@@ -157,6 +170,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                 if (request.isForMainFrame()) {
                     resetToColdBoot();
                     turbolinksAdapter.onReceivedError(errorResponse.getStatusCode());
+                    didReceiveError = true;
                     TurbolinksLog.d("onReceivedHttpError: " + errorResponse.getStatusCode());
                 }
             }
@@ -564,16 +578,15 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
         if (turbolinksIsReady) {
             bridgeInjectionInProgress = false;
+            coldBootInProgress = false;
 
             TurbolinksHelper.runOnMainThread(applicationContext, new Runnable() {
                 @Override
                 public void run() {
                     TurbolinksLog.d("TurbolinksSession is ready");
-                    visitCurrentLocationWithTurbolinks();
+//                    visitCurrentLocationWithTurbolinks();
                 }
             });
-
-            coldBootInProgress = false;
         } else {
             TurbolinksLog.d("TurbolinksSession is not ready. Resetting and throw error.");
             resetToColdBoot();
