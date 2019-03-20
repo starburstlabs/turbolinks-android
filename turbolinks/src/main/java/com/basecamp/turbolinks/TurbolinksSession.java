@@ -93,7 +93,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         this.webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                coldBootInProgress = true;
+                if (!didReceiveError) {
+                    coldBootInProgress = true;
+                }
             }
 
             @Override
@@ -102,17 +104,16 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                     didReceiveError = false;
                     return;
                 }
+
                 String jsCall = "window.webView == null";
                 webView.evaluateJavascript(jsCall, new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String s) {
                         if (Boolean.parseBoolean(s) && !bridgeInjectionInProgress) {
-                            turbolinksIsReady = false;
                             bridgeInjectionInProgress = true;
+                            turbolinksIsReady = false;
                             TurbolinksHelper.injectTurbolinksBridge(TurbolinksSession.this, applicationContext, webView);
                             TurbolinksLog.d("Bridge injected");
-
-                            turbolinksAdapter.onPageFinished();
                         } else {
                             TurbolinksLog.d("webView exists");
                             turbolinksView.hideProgress();
@@ -120,6 +121,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                             bridgeInjectionInProgress = false;
                             coldBootInProgress = false;
                         }
+                        turbolinksAdapter.onPageFinished();
                     }
                 });
             }
@@ -157,7 +159,6 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 resetToColdBoot();
-
                 turbolinksAdapter.onReceivedError(errorCode);
                 TurbolinksLog.d("onReceivedError: " + errorCode);
             }
@@ -169,9 +170,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
                 if (request.isForMainFrame()) {
                     resetToColdBoot();
-                    turbolinksAdapter.onReceivedError(errorResponse.getStatusCode());
                     didReceiveError = true;
                     TurbolinksLog.d("onReceivedHttpError: " + errorResponse.getStatusCode());
+                    turbolinksAdapter.onReceivedError(errorResponse.getStatusCode());
                 }
             }
         });
