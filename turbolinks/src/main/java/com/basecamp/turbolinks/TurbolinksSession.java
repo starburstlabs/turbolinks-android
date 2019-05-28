@@ -148,8 +148,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                 long currentOverrideTime = new Date().getTime();
                 if ((currentOverrideTime - previousOverrideTime) > 500) {
                     previousOverrideTime = currentOverrideTime;
-                    TurbolinksLog.d("Overriding load: " + location);
-                    visitProposedToLocationWithAction(location, ACTION_ADVANCE);
+                    TurbolinksLog.d("Overriding load - current: " + view.getUrl() + " new: " + location);
+                    String action = location.equals(view.getUrl()) ? ACTION_REPLACE : ACTION_ADVANCE;
+                    visitProposedToLocationWithAction(location, action);
                 }
 
                 return true;
