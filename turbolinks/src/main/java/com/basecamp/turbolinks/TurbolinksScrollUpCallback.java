@@ -3,7 +3,7 @@ package com.basecamp.turbolinks;
 /**
  * <p>Defines a callback for determining whether or not a child view can scroll up.</p>
  */
-interface TurbolinksScrollUpCallback {
+public interface TurbolinksScrollUpCallback {
     /**
      *<p>Used to determine whether or not a child view can scroll up.</p>
      *
