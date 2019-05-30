@@ -278,9 +278,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
      * @param turbolinksView An inflated TurbolinksView from your custom layout.
      * @return The TurbolinksSession to continue the chained calls.
      */
-    public TurbolinksSession view(TurbolinksView turbolinksView) {
+    public TurbolinksSession view(TurbolinksView turbolinksView, TurbolinksScrollUpCallback callback) {
         this.turbolinksView = turbolinksView;
-        this.turbolinksView.getRefreshLayout().setCallback(this);
+        this.turbolinksView.getRefreshLayout().setCallback((callback != null) ? callback : this);
         this.turbolinksView.getRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
