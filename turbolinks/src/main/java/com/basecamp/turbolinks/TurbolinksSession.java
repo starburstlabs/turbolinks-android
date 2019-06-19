@@ -114,14 +114,15 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                             turbolinksIsReady = false;
                             TurbolinksHelper.injectTurbolinksBridge(TurbolinksSession.this, applicationContext, webView);
                             TurbolinksLog.d("Bridge injected");
+                            turbolinksAdapter.onPageFinished(true);
                         } else {
                             TurbolinksLog.d("webView exists");
                             turbolinksView.hideProgress();
                             turbolinksIsReady = true;
                             bridgeInjectionInProgress = false;
                             coldBootInProgress = false;
+                            turbolinksAdapter.onPageFinished(false);
                         }
-                        turbolinksAdapter.onPageFinished();
                     }
                 });
             }

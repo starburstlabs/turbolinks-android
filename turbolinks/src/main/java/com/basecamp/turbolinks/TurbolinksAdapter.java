@@ -12,7 +12,7 @@ public interface TurbolinksAdapter {
      * <p>Called after the Turbolinks Javascript bridge has been injected into the webView, during the
      * Android WebViewClient's standard onPageFinished callback.
      */
-    void onPageFinished();
+    void onPageFinished(boolean bridgeInjectionCompleted);
 
     /**
      * <p>Called when the Android WebViewClient's standard onReceivedError callback is fired.</p>
