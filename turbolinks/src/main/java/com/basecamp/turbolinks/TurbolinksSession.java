@@ -9,11 +9,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -21,8 +24,6 @@ import android.webkit.WebViewClient;
 
 import java.util.Date;
 import java.util.HashMap;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * <p>The main concrete class to use Turbolinks 5 in your app.</p>
@@ -100,6 +101,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
             @Override
             public void onPageFinished(WebView view, final String location) {
+                TurbolinksLog.d("onPageFinished: didReceiveError " + didReceiveError);
                 if (didReceiveError) {
                     didReceiveError = false;
                     return;
@@ -159,22 +161,28 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { return; }
                 super.onReceivedError(view, errorCode, description, failingUrl);
-                resetToColdBoot();
-                turbolinksAdapter.onReceivedError(errorCode);
-                TurbolinksLog.d("onReceivedError: " + errorCode);
+                TurbolinksLog.d("onReceivedError (<23): " + errorCode);
+                onError(errorCode);
             }
 
             @Override
-            @TargetApi(Build.VERSION_CODES.M)
+            @RequiresApi(Build.VERSION_CODES.M)
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode());
+                onError(error.getErrorCode());
+            }
+
+            @Override
+            @RequiresApi(Build.VERSION_CODES.M)
             public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                 super.onReceivedHttpError(view, request, errorResponse);
 
                 if (request.isForMainFrame()) {
-                    resetToColdBoot();
-                    didReceiveError = true;
                     TurbolinksLog.d("onReceivedHttpError: " + errorResponse.getStatusCode());
-                    turbolinksAdapter.onReceivedError(errorResponse.getStatusCode());
+                    onError(errorResponse.getStatusCode());
                 }
             }
         });
@@ -836,6 +844,12 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         if (TextUtils.isEmpty(location)) {
             throw new IllegalArgumentException("TurbolinksSession.visit(location) location value must not be null.");
         }
+    }
+
+    private void onError(int code) {
+        resetToColdBoot();
+        didReceiveError = true;
+        turbolinksAdapter.onReceivedError(code);
     }
 
     // ---------------------------------------------------
