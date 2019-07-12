@@ -17,9 +17,9 @@ public interface TurbolinksAdapter {
     /**
      * <p>Called when the Android WebViewClient's standard onReceivedError callback is fired.</p>
      *
-     * @param errorCode Passed through error code returned by the Android WebViewClient.
+     * @param error Passed through error object (code + description) returned by the Android WebViewClient.
      */
-    void onReceivedError(int errorCode);
+    void onReceivedError(TurbolinksError error);
 
     /**
      * <p>Called when Turbolinks detects that the page being visited has been invalidated, typically
