@@ -163,7 +163,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { return; }
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 TurbolinksLog.d("onReceivedError (<23): " + errorCode);
-                onError(errorCode);
+                onError(new TurbolinksError(errorCode, description));
             }
 
             @Override
@@ -171,7 +171,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode());
-                onError(error.getErrorCode());
+                onError(new TurbolinksError(error.getErrorCode(), error.getDescription().toString()));
             }
 
             @Override
@@ -181,7 +181,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
                 if (request.isForMainFrame()) {
                     TurbolinksLog.d("onReceivedHttpError: " + errorResponse.getStatusCode());
-                    onError(errorResponse.getStatusCode());
+                    onError(new TurbolinksError(errorResponse.getStatusCode(), errorResponse.getReasonPhrase()));
                 }
             }
         });
@@ -845,10 +845,10 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         }
     }
 
-    private void onError(int code) {
+    private void onError(TurbolinksError error) {
         resetToColdBoot();
         didReceiveError = true;
-        turbolinksAdapter.onReceivedError(code);
+        turbolinksAdapter.onReceivedError(error);
     }
 
     // ---------------------------------------------------
