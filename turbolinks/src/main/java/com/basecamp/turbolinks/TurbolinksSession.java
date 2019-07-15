@@ -166,6 +166,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                 onError(new TurbolinksError(errorCode, description));
             }
 
+            // Temporarily bypass this newer callback as it seems to be picking up on errors outside
+            // of the crm web app. We will add analytics to this method to try and learn what is
+            // causing it to get hit so often
 //            @Override
 //            @RequiresApi(Build.VERSION_CODES.M)
 //            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
