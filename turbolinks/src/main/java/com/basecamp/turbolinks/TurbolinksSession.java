@@ -160,19 +160,25 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { return; }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { return; }
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 TurbolinksLog.d("onReceivedError (<23): " + errorCode);
                 onError(new TurbolinksError(errorCode, description));
             }
 
-            @Override
-            @RequiresApi(Build.VERSION_CODES.M)
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode());
-                onError(new TurbolinksError(error.getErrorCode(), error.getDescription().toString()));
-            }
+            // Temporarily bypass this newer callback as it seems to be picking up on errors outside
+            // of the crm web app. We will add analytics to this method to try and learn what is
+            // causing it to get hit so often
+//            @Override
+//            @RequiresApi(Build.VERSION_CODES.M)
+//            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+//                super.onReceivedError(view, request, error);
+//
+//                if (request.isForMainFrame()) {
+//                    TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode());
+//                    onError(new TurbolinksError(error.getErrorCode(), error.getDescription().toString()));
+//                }
+//            }
 
             @Override
             @RequiresApi(Build.VERSION_CODES.M)
