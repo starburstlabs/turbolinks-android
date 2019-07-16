@@ -162,8 +162,8 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { return; }
                 super.onReceivedError(view, errorCode, description, failingUrl);
-                TurbolinksLog.d("onReceivedError (<23): " + errorCode);
-                onError(new TurbolinksError(errorCode, description));
+                TurbolinksLog.d("onReceivedError (<23): " + errorCode + " url: " + failingUrl);
+                onError(new TurbolinksError(errorCode, description, failingUrl));
             }
 
             // Temporarily bypass this newer callback as it seems to be picking up on errors outside
@@ -173,10 +173,18 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 //            @RequiresApi(Build.VERSION_CODES.M)
 //            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
 //                super.onReceivedError(view, request, error);
-//
 //                if (request.isForMainFrame()) {
-//                    TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode());
-//                    onError(new TurbolinksError(error.getErrorCode(), error.getDescription().toString()));
+//                    TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode() +
+//                            " url: " + request.getUrl().toString());
+//                    request.getRequestHeaders().forEach(
+//                            (k, v) -> TurbolinksLog.d("Key = " + k + ", Value = " + v)
+//                    );
+//
+////                    onError(new TurbolinksError(
+////                            error.getErrorCode(),
+////                            error.getDescription().toString(),
+////                            request.getUrl().toString()
+////                    ));
 //                }
 //            }
 
@@ -187,7 +195,11 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
                 if (request.isForMainFrame()) {
                     TurbolinksLog.d("onReceivedHttpError: " + errorResponse.getStatusCode());
-                    onError(new TurbolinksError(errorResponse.getStatusCode(), errorResponse.getReasonPhrase()));
+                    onError(new TurbolinksError(
+                            errorResponse.getStatusCode(),
+                            errorResponse.getReasonPhrase(),
+                            request.getUrl().toString()
+                    ));
                 }
             }
         });
