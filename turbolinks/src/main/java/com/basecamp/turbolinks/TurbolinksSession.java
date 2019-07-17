@@ -169,24 +169,39 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
             // Temporarily bypass this newer callback as it seems to be picking up on errors outside
             // of the crm web app. We will add analytics to this method to try and learn what is
             // causing it to get hit so often
-//            @Override
-//            @RequiresApi(Build.VERSION_CODES.M)
-//            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-//                super.onReceivedError(view, request, error);
+            @Override
+            @RequiresApi(Build.VERSION_CODES.M)
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+
+                TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode() +
+                        " description: " + error.getDescription() +
+                        " host: " + request.getUrl().getHost() +
+                        " is_main_frame: " + request.isForMainFrame()
+                );
+
+                turbolinksAdapter.sendAnalytics(
+                        "api_23_error_callback",
+                        new HashMap<String, String>() {{
+                            put("code", String.valueOf(error.getErrorCode()));
+                            put("description", error.getDescription().toString());
+                            put("host", request.getUrl().getHost());
+                            put("is_main_frame", String.valueOf(request.isForMainFrame()));
+                        }}
+                        );
+
 //                if (request.isForMainFrame()) {
-//                    TurbolinksLog.d("onReceivedError (>=23): " + error.getErrorCode() +
-//                            " url: " + request.getUrl().toString());
 //                    request.getRequestHeaders().forEach(
 //                            (k, v) -> TurbolinksLog.d("Key = " + k + ", Value = " + v)
 //                    );
-//
-////                    onError(new TurbolinksError(
-////                            error.getErrorCode(),
-////                            error.getDescription().toString(),
-////                            request.getUrl().toString()
-////                    ));
+
+//                    onError(new TurbolinksError(
+//                            error.getErrorCode(),
+//                            error.getDescription().toString(),
+//                            request.getUrl().toString()
+//                    ));
 //                }
-//            }
+            }
 
             @Override
             @RequiresApi(Build.VERSION_CODES.M)

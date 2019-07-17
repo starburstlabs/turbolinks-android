@@ -1,5 +1,7 @@
 package com.basecamp.turbolinks;
 
+import java.util.HashMap;
+
 /**
  * <p>Defines callbacks that Turbolinks makes available to your app. This interface is required, and
  * should be implemented in an activity (or similar class).</p>
@@ -47,4 +49,6 @@ public interface TurbolinksAdapter {
      * @param action Whether to treat the request as an advance (navigating forward) or a replace (back).
      */
     void visitProposedToLocationWithAction(String location, String action);
+
+    void sendAnalytics(String title, HashMap<String, String> params);
 }
