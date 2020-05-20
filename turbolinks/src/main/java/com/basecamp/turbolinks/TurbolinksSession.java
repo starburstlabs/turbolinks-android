@@ -321,14 +321,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
      */
     public TurbolinksSession view(TurbolinksView turbolinksView, TurbolinksScrollUpCallback callback) {
         this.turbolinksView = turbolinksView;
-        this.turbolinksView.getRefreshLayout().setCallback((callback != null) ? callback : this);
-        this.turbolinksView.getRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                visitLocationWithAction(location, ACTION_ADVANCE);
-            }
-        });
-        this.webViewAttachedToNewParent = this.turbolinksView.attachWebView(webView, screenshotsEnabled, pullToRefreshEnabled);
+        turbolinksView.getRefreshLayout().setCallback((callback != null) ? callback : this);
+        turbolinksView.getRefreshLayout().setOnRefreshListener(() -> visitLocationWithAction(location, ACTION_ADVANCE));
+        this.webViewAttachedToNewParent = turbolinksView.attachWebView(webView, screenshotsEnabled, pullToRefreshEnabled);
 
         return this;
     }
@@ -842,6 +837,11 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
 
     public void showProgressView() {
         turbolinksView.showProgress(progressView, progressIndicator, progressIndicatorDelay);
+    }
+
+    public void updateTurbolinksView(TurbolinksView turbolinksView) {
+        this.turbolinksView = turbolinksView;
+        this.webViewAttachedToNewParent = this.turbolinksView.attachWebView(webView, screenshotsEnabled, pullToRefreshEnabled);
     }
 
     public void showScreenshot() {
