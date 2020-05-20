@@ -189,20 +189,11 @@ public class TurbolinksView extends FrameLayout {
         return refreshLayout;
     }
 
-    /**
-     * Removes the progress view as a child of TurbolinksView
-     */
-    private void removeProgressView() {
-        if (progressView == null) return;
-
-        removeView(progressView);
-        TurbolinksLog.d("Progress view removed");
-    }
 
     /**
      * Removes the screenshot view as a child of TurbolinksView
      */
-    private void removeScreenshotView() {
+    void removeScreenshotView() {
         if (screenshotView == null) return;
 
         removeView(screenshotView);
@@ -211,12 +202,9 @@ public class TurbolinksView extends FrameLayout {
     }
 
     /**
-     * <p>Creates a screenshot of the current webview content and makes it the top visible view.</p>
+     * Adds the screenshot view as a child of TurbolinksView
      */
-    private void screenshotView() {
-        // Only take a screenshot if the activity is not finishing
-        if (getContext() instanceof Activity && ((Activity) getContext()).isFinishing()) return;
-
+    void showScreenshotView() {
         Bitmap screenshot = getScreenshotBitmap();
         if (screenshot == null) return;
 
@@ -229,6 +217,26 @@ public class TurbolinksView extends FrameLayout {
         addView(screenshotView);
 
         TurbolinksLog.d("Screenshot taken");
+    }
+
+    /**
+     * Removes the progress view as a child of TurbolinksView
+     */
+    private void removeProgressView() {
+        if (progressView == null) return;
+
+        removeView(progressView);
+        TurbolinksLog.d("Progress view removed");
+    }
+
+    /**
+     * <p>Creates a screenshot of the current webview content and makes it the top visible view.</p>
+     */
+    private void screenshotView() {
+        // Only take a screenshot if the activity is not finishing
+        if (getContext() instanceof Activity && ((Activity) getContext()).isFinishing()) return;
+
+        showScreenshotView();
     }
 
     /**

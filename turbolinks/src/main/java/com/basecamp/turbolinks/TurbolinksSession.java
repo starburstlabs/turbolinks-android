@@ -844,6 +844,14 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         turbolinksView.showProgress(progressView, progressIndicator, progressIndicatorDelay);
     }
 
+    public void showScreenshot() {
+        turbolinksView.showScreenshotView();
+    }
+
+    public void hideScreenshot() {
+        turbolinksView.removeScreenshotView();
+    }
+
     /**
      * <p>Convenience method to simply revisit the current location in the TurbolinksSession. Useful
      * so that different visit logic can be wrappered around this call in {@link #visit} or
