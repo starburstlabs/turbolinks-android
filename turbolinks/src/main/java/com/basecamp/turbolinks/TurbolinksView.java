@@ -234,7 +234,8 @@ public class TurbolinksView extends FrameLayout {
      */
     private void screenshotView() {
         // Only take a screenshot if the activity is not finishing
-        if (getContext() instanceof Activity && ((Activity) getContext()).isFinishing()) return;
+        if ((getContext() instanceof Activity && ((Activity) getContext()).isFinishing())
+                || screenshotView != null) return;
 
         showScreenshotView();
     }
