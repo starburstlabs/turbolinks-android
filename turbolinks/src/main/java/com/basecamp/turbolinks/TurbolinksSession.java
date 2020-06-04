@@ -118,7 +118,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                             turbolinksAdapter.onPageFinished(true);
                         } else {
                             TurbolinksLog.d("webView exists");
-                            turbolinksView.hideProgress();
+                            if (currentVisitIdentifier == null) turbolinksView.hideProgress();
                             turbolinksIsReady = true;
                             bridgeInjectionInProgress = false;
                             coldBootInProgress = false;
@@ -721,6 +721,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         bridgeInjectionInProgress = false;
         turbolinksIsReady = false;
         coldBootInProgress = false;
+        // TODO: currentVisitIdentifier = null?
     }
 
     /**
