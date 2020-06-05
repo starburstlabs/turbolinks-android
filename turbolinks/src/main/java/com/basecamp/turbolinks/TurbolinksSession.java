@@ -721,7 +721,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         bridgeInjectionInProgress = false;
         turbolinksIsReady = false;
         coldBootInProgress = false;
-        // TODO: currentVisitIdentifier = null?
+        currentVisitIdentifier = null;
     }
 
     /**
