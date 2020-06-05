@@ -176,6 +176,7 @@ public class TurbolinksView extends FrameLayout {
             webView.setBackgroundColor(((ColorDrawable) getBackground()).getColor());
         }
 
+        webView.setVisibility(View.VISIBLE);
         refreshLayout.addView(webView);
         return true;
     }
