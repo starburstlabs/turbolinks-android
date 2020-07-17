@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -118,6 +119,9 @@ public class TurbolinksView extends FrameLayout {
 
         this.progressView = progressView;
         progressView.setClickable(true);
+        if (progressView.getParent() != null) {
+            ((ViewGroup)progressView.getParent()).removeView(progressView);
+        }
         addView(progressView);
 
         progressIndicator.setVisibility(View.GONE);
