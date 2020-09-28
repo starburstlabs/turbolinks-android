@@ -93,6 +93,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
         this.webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                TurbolinksLog.d("onPageStarted");
                 if (!didReceiveError) {
                     coldBootInProgress = true;
                 }
@@ -137,8 +138,10 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
              * http://stackoverflow.com/a/6739042/3280911
              */
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String location) {
-                if (!turbolinksIsReady || coldBootInProgress) {
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                String newLocation = request.getUrl().toString();
+                TurbolinksLog.d("shouldOverrideUrlLoading " + view.getUrl() + " new: " + newLocation);
+                if (!turbolinksIsReady || coldBootInProgress || newLocation.equals(view.getUrl())) {
                     return false;
                 }
 
@@ -149,10 +152,9 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
                  */
                 long currentOverrideTime = new Date().getTime();
                 if ((currentOverrideTime - previousOverrideTime) > 500) {
+                    TurbolinksLog.d("Overriding load - current: " + view.getUrl() + " new: " + newLocation);
                     previousOverrideTime = currentOverrideTime;
-                    TurbolinksLog.d("Overriding load - current: " + view.getUrl() + " new: " + location);
-                    String action = location.equals(view.getUrl()) ? ACTION_REPLACE : ACTION_ADVANCE;
-                    visitProposedToLocationWithAction(location, action);
+                    visitProposedToLocationWithAction(newLocation,  ACTION_ADVANCE);
                 }
 
                 return true;
