@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -156,9 +157,22 @@ public class TurbolinksView extends FrameLayout {
         if (webView.getParent() == refreshLayout) return false;
 
         refreshLayout.setEnabled(pullToRefreshEnabled);
+        removeWebViewFromParent(webView, screenshotsEnabled);
 
-        if (webView.getParent() instanceof TurbolinksSwipeRefreshLayout) {
-            TurbolinksSwipeRefreshLayout previousRefreshLayout = (TurbolinksSwipeRefreshLayout) webView.getParent();
+        // Set the webview background to match the container background
+        if (getBackground() instanceof ColorDrawable) {
+            webView.setBackgroundColor(((ColorDrawable) getBackground()).getColor());
+        }
+
+        webView.setVisibility(View.VISIBLE);
+        refreshLayout.addView(webView);
+        return true;
+    }
+
+    void removeWebViewFromParent(WebView webView, boolean screenshotsEnabled) {
+        ViewParent parent = webView.getParent();
+        if (parent instanceof TurbolinksSwipeRefreshLayout) {
+            TurbolinksSwipeRefreshLayout previousRefreshLayout = (TurbolinksSwipeRefreshLayout) parent;
             TurbolinksView previousTurbolinksView = (TurbolinksView) previousRefreshLayout.getParent();
 
             if (screenshotsEnabled) previousTurbolinksView.screenshotView();
@@ -173,16 +187,9 @@ public class TurbolinksView extends FrameLayout {
             } catch (Exception e) {
                 previousRefreshLayout.removeView(webView);
             }
+        } else if (parent != null && parent instanceof ViewGroup) {
+            ((ViewGroup) parent).removeView(webView);
         }
-
-        // Set the webview background to match the container background
-        if (getBackground() instanceof ColorDrawable) {
-            webView.setBackgroundColor(((ColorDrawable) getBackground()).getColor());
-        }
-
-        webView.setVisibility(View.VISIBLE);
-        refreshLayout.addView(webView);
-        return true;
     }
 
     /**
