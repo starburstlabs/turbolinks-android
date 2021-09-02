@@ -41,6 +41,10 @@ class TurbolinksLog {
      * @param msg Message to log.
      */
     private static void log(int logLevel, String tag, String msg) {
+        if (!BuildConfig.DEBUG) {
+            return;
+        }
+        
         switch (logLevel) {
             case Log.DEBUG:
                 if (debugLoggingEnabled) {
