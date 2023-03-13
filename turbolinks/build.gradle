@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 31
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 11
         versionName "1.0.9"
 
