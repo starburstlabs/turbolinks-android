@@ -1,46 +1,47 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+  id 'com.android.library'
+  id 'kotlin-android'
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "1.0.9"
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  defaultConfig {
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+    versionCode 11
+    versionName "1.0.9"
 
-        // Define ProGuard rules for this android library project. These rules will be applied when
-        // a consumer of this library sets 'minifyEnabled true'.
-        consumerProguardFiles 'proguard-consumer-rules.pro'
+    // Define ProGuard rules for this android library project. These rules will be applied when
+    // a consumer of this library sets 'minifyEnabled true'.
+    consumerProguardFiles 'proguard-consumer-rules.pro'
+  }
+  buildFeatures {
+    viewBinding true
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildFeatures {
-        viewBinding true
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
+  }
+  compileOptions {
+    targetCompatibility rootProject.ext.targetJvmVersion
+    sourceCompatibility rootProject.ext.sourceJvmVersion
+  }
+  namespace "com.basecamp.turbolinks"
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.appcompat:appcompat:$appCompatVersion"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'org.apache.commons:commons-lang3:3.4'
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation "androidx.appcompat:appcompat:$appCompatVersion"
+  implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+  implementation 'com.google.code.gson:gson:2.8.9'
+  implementation 'org.apache.commons:commons-lang3:3.4'
 
-    testImplementation 'org.assertj:assertj-core:3.24.2'
-    testImplementation 'org.robolectric:robolectric:4.9'
-    testImplementation 'org.mockito:mockito-core:5.1.1'
-    testImplementation 'junit:junit:4.13.2'
-    implementation "androidx.core:core-ktx:$coreVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  testImplementation 'org.assertj:assertj-core:3.24.2'
+  testImplementation 'org.robolectric:robolectric:4.9'
+  testImplementation 'org.mockito:mockito-core:5.1.1'
+  testImplementation 'junit:junit:4.13.2'
+  implementation "androidx.core:core-ktx:$coreVersion"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 }
