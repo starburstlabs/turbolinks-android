@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +18,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -141,6 +141,10 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String newLocation = request.getUrl().toString();
                 TurbolinksLog.d("shouldOverrideUrlLoading " + view.getUrl() + " new: " + newLocation);
+                if (turbolinksAdapter.shouldOverrideResponse(request)) {
+                  return true;
+                }
+
                 if (!turbolinksIsReady || coldBootInProgress || newLocation.equals(view.getUrl())) {
                     return false;
                 }
