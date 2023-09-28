@@ -54,5 +54,5 @@ public interface TurbolinksAdapter {
 
     void sendAnalytics(String title, HashMap<String, String> params);
 
-    boolean shouldOverrideResponse(WebResourceRequest request);
+    boolean shouldOverrideRequest(WebResourceRequest request);
 }

@@ -141,7 +141,7 @@ public class TurbolinksSession implements TurbolinksScrollUpCallback {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String newLocation = request.getUrl().toString();
                 TurbolinksLog.d("shouldOverrideUrlLoading " + view.getUrl() + " new: " + newLocation);
-                if (turbolinksAdapter.shouldOverrideResponse(request)) {
+                if (turbolinksAdapter.shouldOverrideRequest(request)) {
                   return true;
                 }
 
