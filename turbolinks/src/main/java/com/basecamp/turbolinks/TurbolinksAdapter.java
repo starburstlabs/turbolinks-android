@@ -1,5 +1,7 @@
 package com.basecamp.turbolinks;
 
+import android.webkit.WebResourceRequest;
+
 import java.util.HashMap;
 
 /**
@@ -51,4 +53,6 @@ public interface TurbolinksAdapter {
     void visitProposedToLocationWithAction(String location, String action);
 
     void sendAnalytics(String title, HashMap<String, String> params);
+
+    boolean shouldOverrideRequest(WebResourceRequest request);
 }
