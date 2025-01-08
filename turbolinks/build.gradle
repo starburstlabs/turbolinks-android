@@ -39,9 +39,4 @@ dependencies {
   implementation libs.commons.lang3
   implementation libs.androidx.core.ktx
   implementation libs.kotlin.stdlib
-
-  testImplementation libs.assertj.core
-  testImplementation libs.junit
-  testImplementation libs.mockito.core
-  testImplementation libs.robolectric
 }
